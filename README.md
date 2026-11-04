@@ -1,6 +1,6 @@
 # JobMotion: skills de vídeo para Claude Code
 
-Cinco skills que cobrem o caminho completo de um vídeo: criar, editar, trocar mídia, gerar objetos 3D e conferir o MP4 pronto. Funcionam juntas com o [kit de vídeo de lançamento](https://github.com/vicobarreto) (grava a tela real de um sistema e monta o MP4).
+Cinco skills que cobrem o caminho completo de um vídeo: criar, editar, trocar mídia, gerar objetos 3D e conferir o MP4 pronto. Funcionam juntas com o kit de vídeo de lançamento (`video-lancamento`) (grava a tela real de um sistema e monta o MP4).
 
 ## Sumário
 
@@ -47,8 +47,8 @@ Cinco skills que cobrem o caminho completo de um vídeo: criar, editar, trocar m
 ## Instalação
 
 ```bash
-git clone <url-deste-repositorio>
-cd skills-video
+git clone https://github.com/vicobarreto/jobmotion.git
+cd jobmotion
 ./scripts/instalar.sh            # copia para ~/.claude/skills (não sobrescreve as que já existem)
 ./scripts/instalar.sh /outra/pasta
 ```
