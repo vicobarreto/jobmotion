@@ -1,0 +1,8 @@
+name: validar-skills
+on: [push, pull_request]
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/validar.sh
