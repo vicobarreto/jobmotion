@@ -1,4 +1,4 @@
-# Skills de vídeo para Claude Code
+# JobMotion: skills de vídeo para Claude Code
 
 Cinco skills que cobrem o caminho completo de um vídeo: criar, editar, trocar mídia, gerar objetos 3D e conferir o MP4 pronto. Funcionam juntas com o [kit de vídeo de lançamento](https://github.com/vicobarreto) (grava a tela real de um sistema e monta o MP4).
 
