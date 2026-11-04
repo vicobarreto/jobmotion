@@ -1,6 +1,6 @@
 # JobMotion: skills de vídeo para Claude Code
 
-Cinco skills que cobrem o caminho completo de um vídeo: criar, editar, trocar mídia, gerar objetos 3D e conferir o MP4 pronto. Funcionam juntas com o kit de vídeo de lançamento (`video-lancamento`) (grava a tela real de um sistema e monta o MP4).
+Oito skills que cobrem o caminho completo de um vídeo: criar, editar, trocar mídia, gerar objetos 3D e conferir o MP4 pronto. Funcionam juntas com o kit de vídeo de lançamento (`video-lancamento`) (grava a tela real de um sistema e monta o MP4).
 
 ## Sumário
 
@@ -23,14 +23,19 @@ Cinco skills que cobrem o caminho completo de um vídeo: criar, editar, trocar m
 | `media-use` | Música, efeitos, voz, imagens, logos, recortes, correção de cor e mixagem de áudio. | HeyGen, Apache-2.0 |
 | `objeto-3d` | Objeto 3D em laço de 3 s, com fundo transparente, nas cores da marca (Blender). | Autoral |
 | `assistir-video` | Folhas de quadros, transcrição e legenda de um vídeo, para conferir ou estudar. | Autoral |
+| `video-por-nicho` | Roteiro pronto por nicho (pet, restaurante, clínica, advocacia, imobiliária, loja, SaaS, curso, salão, academia). | Autoral |
+| `estilos-de-motion` | Dez estilos de animação (lúdico, corporativo, neon, editorial, cinético, glass, brutalista, VHS, luxo, pop) com easing, tempos e transições. | Autoral |
+| `estilos-de-edicao` | Nove estilos de edição (demo calma, reels, anúncio, explicativo, depoimento, tutorial, antes e depois, tour, lançamento) com ritmo e ajustes. | Autoral |
 
 ## Como as peças se encaixam
 
 ```
- roteiro / ideia
+ nicho (video-por-nicho) → roteiro
       │
       ▼
  hyperframes ──── media-use   (voz, música, imagens, cor)
+      │      ├─── estilos-de-motion  (visual da animação)
+      │      ├─── estilos-de-edicao  (ritmo e cortes)
       │      └─── objeto-3d   (objetos 3D transparentes)
       ▼
  hyperframes-cli  (check → snapshot → preview → render)
@@ -64,6 +69,9 @@ Abra uma sessão nova do Claude Code e confira com `/hyperframes` ou `/assistir-
 | Mover, cortar ou renderizar | `/hyperframes-cli` |
 | Um presente, voucher ou moeda 3D com a cor da marca | `/objeto-3d presente --como presente-marca --cores caixa=#0b3d2e,fita=#f2c14e` |
 | Conferir um MP4 ou estudar um vídeo de terceiros | `/assistir-video caminho-ou-url` |
+| Roteiro para um nicho | `/video-por-nicho clinica` |
+| Escolher o visual da animação | `/estilos-de-motion` |
+| Dar ritmo e cortar | `/estilos-de-edicao` |
 
 Comandos mais usados do HyperFrames:
 
@@ -93,7 +101,7 @@ Mais exemplos em [docs/guia-rapido.md](docs/guia-rapido.md).
 ## Estrutura do repositório
 
 ```
-skills/            as cinco skills, prontas para copiar
+skills/            as oito skills, prontas para copiar
 scripts/           instalar.sh e validar.sh
 docs/              guia rápido e plano de divulgação
 .github/workflows/ validação automática das skills
@@ -105,7 +113,7 @@ NOTICE             créditos e licenças de terceiros
 ## Origem e licenças
 
 `hyperframes`, `hyperframes-cli` e `media-use` são cópias do pacote `hyperframes` 0.8.222 (Apache-2.0). Veja o [NOTICE](NOTICE). Ao atualizar o pacote, copie de novo `dist/skills/` e atualize este número.
-`objeto-3d` e `assistir-video` são autorais. **Licença das skills autorais: a definir pelo autor** (sugestão: MIT).
+`objeto-3d`, `assistir-video`, `video-por-nicho`, `estilos-de-motion` e `estilos-de-edicao` são autorais. **Licença das skills autorais: a definir pelo autor** (sugestão: MIT).
 
 ## Divulgação
 
