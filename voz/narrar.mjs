@@ -75,8 +75,10 @@ function agruparEmLinhas(blocos, max = 52) {
 }
 
 async function edge(trecho, voz, mp3, srt) {
+  // voz.tom (opcional): "-10Hz" deixa a voz mais grave, "+10Hz" mais aguda.
+  const tom = voz.tom ? [`--pitch=${voz.tom}`] : [];
   await rodar('python', [
-    '-m', 'edge_tts', '--voice', voz.voz, `--rate=${voz.velocidade}`,
+    '-m', 'edge_tts', '--voice', voz.voz, `--rate=${voz.velocidade}`, ...tom,
     '--text', trecho.fala, '--write-media', mp3, '--write-subtitles', srt,
   ]);
 }

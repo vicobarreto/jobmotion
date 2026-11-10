@@ -74,7 +74,7 @@ Num roteiro, a voz é o bloco `voz`. Quando você roda `node src/video.mjs rotei
 
 | Motor | Custo | Configuração |
 |---|---|---|
-| `edge` (padrão) | grátis | `voz.voz` (ex.: `pt-BR-FranciscaNeural`), `voz.velocidade` (ex.: `+5%`) |
+| `edge` (padrão) | grátis | `voz.voz` (ex.: `pt-BR-FranciscaNeural`), `voz.velocidade` (ex.: `+5%`), `voz.tom` (ex.: `-15Hz`, mais grave) |
 | `openai` | centavos por vídeo | variável `OPENAI_API_KEY`; `voz.voz` (ex.: `nova`), `voz.modelo` (padrão `gpt-4o-mini-tts`), `voz.instrucoes` |
 | `elevenlabs` | pago | variável `ELEVENLABS_API_KEY`; `voz.voz` = id da voz; `voz.modelo` (padrão `eleven_multilingual_v2`) |
 

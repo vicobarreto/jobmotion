@@ -28,6 +28,7 @@ const voz = {
   motor: opcao('motor', 'edge'),
   voz: opcao('voz', 'pt-BR-FranciscaNeural'),
   velocidade: opcao('velocidade', '+5%'),
+  ...(opcao('tom') ? { tom: opcao('tom') } : {}),
 };
 
 const roteiro = caminhoRoteiro
