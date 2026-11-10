@@ -1,6 +1,6 @@
 # JobMotion: skills de vídeo para Claude Code
 
-Oito skills que cobrem o caminho completo de um vídeo: criar, editar, trocar mídia, gerar objetos 3D e conferir o MP4 pronto. Funcionam juntas com o kit de vídeo de lançamento (`video-lancamento`) (grava a tela real de um sistema e monta o MP4).
+Nove skills que cobrem o caminho completo de um vídeo: criar, editar, trocar mídia, gerar objetos 3D e conferir o MP4 pronto. Funcionam juntas com o kit de vídeo de lançamento (`video-lancamento`) (grava a tela real de um sistema e monta o MP4).
 
 ## Sumário
 
@@ -26,6 +26,7 @@ Oito skills que cobrem o caminho completo de um vídeo: criar, editar, trocar m�
 | `video-por-nicho` | Roteiro pronto por nicho (pet, restaurante, clínica, advocacia, imobiliária, loja, SaaS, curso, salão, academia). | Autoral |
 | `estilos-de-motion` | Dez estilos de animação (lúdico, corporativo, neon, editorial, cinético, glass, brutalista, VHS, luxo, pop) com easing, tempos e transições. | Autoral |
 | `estilos-de-edicao` | Nove estilos de edição (demo calma, reels, anúncio, explicativo, depoimento, tutorial, antes e depois, tour, lançamento) com ritmo e ajustes. | Autoral |
+| `voz-narracao` | Gera a narração pt-BR (MP3 + legenda com tempo) com o mesmo código dos vídeos; pronúncia de marcas. | Autoral |
 
 ## Como as peças se encaixam
 
@@ -72,6 +73,7 @@ Abra uma sessão nova do Claude Code e confira com `/hyperframes` ou `/assistir-
 | Roteiro para um nicho | `/video-por-nicho clinica` |
 | Escolher o visual da animação | `/estilos-de-motion` |
 | Dar ritmo e cortar | `/estilos-de-edicao` |
+| Gerar a voz do vídeo | `/voz-narracao` ou `node voz/falar.mjs "texto" --saida pasta` |
 
 Comandos mais usados do HyperFrames:
 
@@ -83,12 +85,12 @@ npx hyperframes preview --background                # prévia
 npx hyperframes render --quality looks -o saida.mp4 # draft, looks ou delivery
 ```
 
-Mais exemplos em [docs/guia-rapido.md](docs/guia-rapido.md).
+Mais exemplos em [docs/guia-rapido.md](docs/guia-rapido.md). A voz está explicada em [docs/voz.md](docs/voz.md).
 
 ## Requisitos
 
 - Node 22+ e FFmpeg no PATH (HyperFrames).
-- Python 3.10+ com `yt-dlp` e `faster-whisper` (`assistir-video`).
+- Python 3.10+ com `yt-dlp` e `faster-whisper` (`assistir-video`) e `edge-tts` (`voz-narracao`).
 - Blender 4+ (`objeto-3d`).
 - `objeto-3d` usa o gerador do kit de vídeo (`src/objeto3d.mjs`); indique a pasta do kit onde a skill pede `<pasta-do-kit>`.
 
@@ -101,9 +103,10 @@ Mais exemplos em [docs/guia-rapido.md](docs/guia-rapido.md).
 ## Estrutura do repositório
 
 ```
-skills/            as oito skills, prontas para copiar
+skills/            as nove skills, prontas para copiar
 scripts/           instalar.sh e validar.sh
-docs/              guia rápido e plano de divulgação
+voz/               código que gera a narração (narrar.mjs, falar.mjs)
+docs/              guia rápido, como funciona a voz e plano de divulgação
 .github/workflows/ validação automática das skills
 NOTICE             créditos e licenças de terceiros
 ```
