@@ -26,7 +26,9 @@ A duração real do áudio define o tempo de cada cena: o kit grava a tela e mon
 
 | Arquivo | Para quê |
 |---|---|
-| `voz/narrar.mjs` | gera os áudios e as legendas (motores `edge`, `openai`, `elevenlabs`) |
+| `voz/narrar.mjs` | gera os áudios e as legendas (motores `edge`, `piper`, `openai`, `elevenlabs`) |
+| `voz/piper_falar.py` | chamado pelo motor `piper`: gera o WAV com o modelo local |
+| `scripts/instalar-piper.sh` | instala o `piper-tts` e baixa vozes pt_BR |
 | `voz/falar.mjs` | linha de comando: um texto avulso ou um roteiro inteiro |
 | `voz/roteiro.mjs` | lê as falas do roteiro (abertura, cenas, fechamento) |
 | `voz/util.mjs` | executa programas, mede duração com `ffprobe`, calcula o hash do cache |
@@ -75,6 +77,7 @@ Num roteiro, a voz é o bloco `voz`. Quando você roda `node src/video.mjs rotei
 | Motor | Custo | Configuração |
 |---|---|---|
 | `edge` (padrão) | grátis | `voz.voz` (ex.: `pt-BR-FranciscaNeural`), `voz.velocidade` (ex.: `+5%`), `voz.tom` (ex.: `-15Hz`, mais grave) |
+| `piper` | grátis, 100% local, sem internet | `voz.voz` (`jeff`, `cadu`, `faber`, `edresson`), `voz.pasta` (modelos `.onnx`), `voz.python`, `voz.escala` (padrão 1.15; maior = mais devagar). Ver a seção Piper abaixo |
 | `openai` | centavos por vídeo | variável `OPENAI_API_KEY`; `voz.voz` (ex.: `nova`), `voz.modelo` (padrão `gpt-4o-mini-tts`), `voz.instrucoes` |
 | `elevenlabs` | pago | variável `ELEVENLABS_API_KEY`; `voz.voz` = id da voz; `voz.modelo` (padrão `eleven_multilingual_v2`) |
 
@@ -85,6 +88,38 @@ python -m edge_tts --list-voices | grep pt-BR
 ```
 
 Só o motor `edge` devolve a legenda com o tempo de cada trecho de frase. Nos outros dois, a legenda é estimada: as frases são distribuídas pelo tamanho ao longo da duração do áudio.
+
+## Piper: voz local e leve
+
+Rede neural pequena (cerca de 63 MB por voz) que roda na CPU, sem internet nem chave. O texto vira fonemas
+(espeak-ng), os fonemas entram num modelo VITS (`.onnx`) e saem as amostras de áudio. Gera uma fala em
+menos de 1 s depois de carregar o modelo. A voz é fixa, de uma pessoa só: não tem sotaque regional nem
+atuação (grito, deboche), e o que se ajusta é velocidade e variação de entonação.
+
+```bash
+./scripts/instalar-piper.sh modelos-piper jeff        # instala piper-tts e baixa a voz
+node voz/falar.mjs "Coé, parceiro. Papo reto." --motor piper --pasta modelos-piper --saida saida-voz
+```
+
+No roteiro:
+
+```jsonc
+"voz": { "motor": "piper", "voz": "jeff", "pasta": "modelos-piper", "escala": 1.15 }
+```
+
+| Opção | O que faz |
+|---|---|
+| `voz.voz` | `jeff`, `cadu`, `faber`, `edresson` (ou o caminho de um `.onnx`) |
+| `voz.pasta` | pasta dos modelos; também vale a variável `PIPER_DIR` |
+| `voz.python` | Python que tem o `piper-tts`; também vale `PIPER_PYTHON` (use quando o Python do sistema não o tem) |
+| `voz.escala` | velocidade: maior = mais devagar |
+| `voz.ruido`, `voz.ruidoW` | variação de entonação e de ritmo (opcional) |
+
+O Piper gera WAV; o kit converte para MP3 com o FFmpeg. Não devolve legenda com tempo: ela é estimada pela
+duração, como nos motores `openai` e `elevenlabs`.
+
+**Licença das vozes:** a ficha da `jeff` diz dados CC0 e base CC0. Cada voz tem a sua ficha
+(`MODEL_CARD` no Hugging Face): confira antes de uso comercial, principalmente `faber` e `cadu`.
 
 ## Pronúncia de marcas e siglas
 

@@ -29,7 +29,12 @@ const voz = {
   voz: opcao('voz', 'pt-BR-FranciscaNeural'),
   velocidade: opcao('velocidade', '+5%'),
   ...(opcao('tom') ? { tom: opcao('tom') } : {}),
+  // motor piper: --pasta (modelos .onnx), --python (com piper-tts), --escala (maior = mais devagar)
+  ...(opcao('pasta') ? { pasta: opcao('pasta') } : {}),
+  ...(opcao('python') ? { python: opcao('python') } : {}),
+  ...(opcao('escala') ? { escala: Number(opcao('escala')) } : {}),
 };
+if (voz.motor === 'piper' && !opcao('voz')) voz.voz = 'jeff';
 
 const roteiro = caminhoRoteiro
   ? JSON.parse(await readFile(caminhoRoteiro, 'utf8'))

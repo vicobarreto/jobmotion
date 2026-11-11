@@ -1,6 +1,6 @@
 ---
 name: voz-narracao
-description: Gera a narração em português do Brasil dos vídeos — a voz de cada cena em MP3 e a legenda com tempo — com o mesmo código usado nos vídeos do kit (Edge TTS grátis, ou OpenAI e ElevenLabs com chave), com cache, controle de velocidade e dicionário de pronúncia para marcas e siglas. Use quando o usuário disser "gera a voz do vídeo", "narra esse texto", "troca a voz", "a voz leu o nome da marca errado", "quero a mesma voz dos outros vídeos", "legenda sincronizada com a fala".
+description: Gera a narração em português do Brasil dos vídeos — a voz de cada cena em MP3 e a legenda com tempo — com o mesmo código usado nos vídeos do kit (Edge TTS grátis, Piper local, ou OpenAI e ElevenLabs com chave), com cache, controle de velocidade e dicionário de pronúncia para marcas e siglas. Use quando o usuário disser "gera a voz do vídeo", "narra esse texto", "troca a voz", "a voz leu o nome da marca errado", "quero a mesma voz dos outros vídeos", "legenda sincronizada com a fala".
 argument-hint: "<texto ou roteiro.json> [--voz pt-BR-FranciscaNeural] [--velocidade +5%]"
 user-invocable: true
 ---
@@ -29,7 +29,9 @@ Dentro de um vídeo do kit a voz é gerada sozinha na etapa `narrar` (`node src/
 
 ## Voz padrão dos vídeos
 
-`motor: "edge"`, `voz: "pt-BR-FranciscaNeural"`, `velocidade: "+4%"` a `"+5%"`. Para trocar, edite o bloco `voz` do roteiro ou use `--voz`. Lista de vozes: `python -m edge_tts --list-voices | grep pt-BR`.
+`motor: "edge"`, `voz: "pt-BR-FranciscaNeural"`, `velocidade: "+4%"` a `"+5%"`.
+
+Alternativa local e sem internet: motor `piper` (voz `jeff`), ver `docs/voz.md`. Para trocar, edite o bloco `voz` do roteiro ou use `--voz`. Lista de vozes: `python -m edge_tts --list-voices | grep pt-BR`.
 
 ## Passo a passo
 

@@ -3,14 +3,16 @@
 // Motores (roteiro.voz.motor):
 //   edge        — Edge TTS (grátis, vozes neurais pt-BR; usa o serviço online da Microsoft de forma
 //                 não oficial). Padrão. Precisa de `pip install edge-tts`.
+//   piper       — voz local (Piper + modelo .onnx), sem internet e sem chave; ver a função piper().
 //   openai      — OPENAI_API_KEY no ambiente; voz.modelo (padrão gpt-4o-mini-tts), voz.voz (ex.: "nova").
 //   elevenlabs  — ELEVENLABS_API_KEY no ambiente; voz.voz = id da voz; modelo eleven_multilingual_v2.
 // Chave de API só por variável de ambiente, nunca no roteiro.
 //
 // Cache: o áudio só é refeito quando o texto, a voz ou a velocidade mudam.
-import { existsSync } from 'node:fs';
-import { readFile, writeFile } from 'node:fs/promises';
+import { existsSync, readdirSync } from 'node:fs';
+import { readFile, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { trechos } from './roteiro.mjs';
 import { duracao, garantirPasta, hash, log, rodar } from './util.mjs';
 
@@ -114,7 +116,43 @@ async function elevenlabs(trecho, voz, mp3) {
   await writeFile(mp3, Buffer.from(await r.arrayBuffer()));
 }
 
-const MOTORES = { edge, openai, elevenlabs };
+/**
+ * Piper: voz local, sem internet e sem chave. Precisa de `pip install piper-tts` e de uma pasta com os
+ * modelos .onnx (e .onnx.json) de pt_BR (faber, cadu, jeff, edresson), baixados do rhasspy/piper-voices.
+ *   voz.voz     nome da voz ("jeff") ou caminho de um .onnx. Padrão: jeff.
+ *   voz.pasta   pasta dos modelos (ou a variável PIPER_DIR).
+ *   voz.python  Python que tem o piper-tts (ou a variável PIPER_PYTHON). Padrão: python.
+ *   voz.escala  length_scale: maior = mais devagar. Padrão 1.15.
+ *   voz.ruido, voz.ruidoW  variação de entonação e de ritmo (opcional).
+ */
+async function piper(trecho, voz, mp3) {
+  const python = voz.python ?? process.env.PIPER_PYTHON ?? 'python';
+  const nome = voz.voz ?? 'jeff';
+  let modelo = nome;
+  if (!nome.toLowerCase().endsWith('.onnx')) {
+    const pasta = voz.pasta ?? process.env.PIPER_DIR;
+    if (!pasta) throw new Error('motor piper: informe voz.pasta ou a variável PIPER_DIR (pasta com os .onnx)');
+    const achado = existsSync(pasta) && readdirSync(pasta).find((f) => f.startsWith(`pt_BR-${nome}-`) && f.endsWith('.onnx'));
+    if (!achado) throw new Error(`motor piper: modelo pt_BR-${nome}-*.onnx não encontrado em ${pasta}`);
+    modelo = path.join(pasta, achado);
+  }
+  const wav = mp3.replace(/\.mp3$/, '.wav');
+  const txt = mp3.replace(/\.mp3$/, '.txt');
+  await writeFile(txt, trecho.fala, 'utf8'); // por arquivo: evita problema de acento na linha de comando
+  try {
+    const script = path.join(path.dirname(fileURLToPath(import.meta.url)), 'piper_falar.py');
+    await rodar(python, [
+      script, modelo, txt, wav,
+      String(voz.escala ?? 1.15), String(voz.ruido ?? '-'), String(voz.ruidoW ?? '-'),
+    ]);
+    await rodar('ffmpeg', ['-y', '-loglevel', 'error', '-i', wav, '-codec:a', 'libmp3lame', '-q:a', '3', mp3]);
+  } finally {
+    await unlink(txt).catch(() => {});
+    await unlink(wav).catch(() => {});
+  }
+}
+
+const MOTORES = { edge, piper, openai, elevenlabs };
 
 /** Gera (ou reaproveita) a narração de todos os trechos. Devolve { [id]: { arquivo, duracao, legenda } }. */
 export async function narrar(roteiro, pastaTrabalho) {
