@@ -85,7 +85,7 @@ npx hyperframes preview --background                # prévia
 npx hyperframes render --quality looks -o saida.mp4 # draft, looks ou delivery
 ```
 
-Mais exemplos em [docs/guia-rapido.md](docs/guia-rapido.md). A voz está explicada em [docs/voz.md](docs/voz.md) e a voz de personagem em [docs/personagem-br.md](docs/personagem-br.md).
+Mais exemplos em [docs/guia-rapido.md](docs/guia-rapido.md). A voz está explicada em [docs/voz.md](docs/voz.md) , a voz de personagem em [docs/personagem-br.md](docs/personagem-br.md) e a clonagem com autorização em [docs/clonagem-autorizada.md](docs/clonagem-autorizada.md).
 
 ## Requisitos
 
@@ -105,7 +105,7 @@ Mais exemplos em [docs/guia-rapido.md](docs/guia-rapido.md). A voz está explica
 ```
 skills/            as nove skills, prontas para copiar
 scripts/           instalar.sh e validar.sh
-voz/               código que gera a narração (narrar.mjs, falar.mjs)
+voz/               código que gera a narração (narrar.mjs, falar.mjs, clonar.mjs)
 docs/              guia rápido, a voz, voz de personagem e plano de divulgação
 .github/workflows/ validação automática das skills
 NOTICE             créditos e licenças de terceiros
